@@ -1,0 +1,52 @@
+{
+  "kind": "collectionType",
+  "collectionName": "characters",
+  "info": {
+    "singularName": "character",
+    "pluralName": "characters",
+    "displayName": "character"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "ki": {
+      "type": "string"
+    },
+    "maxki": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "gender": {
+      "type": "enumeration",
+      "enum": [
+        "Male",
+        "Female",
+        "Other",
+        "Unknown"
+      ]
+    },
+    "planet": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::planet.planet",
+      "inversedBy": "characters"
+    },
+    "name": {
+      "type": "string"
+    }
+  }
+}

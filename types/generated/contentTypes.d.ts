@@ -430,12 +430,12 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
-export interface ApiGrupoGrupo extends Struct.CollectionTypeSchema {
-  collectionName: 'grupos';
+export interface ApiCharacterCharacter extends Struct.CollectionTypeSchema {
+  collectionName: 'characters';
   info: {
-    displayName: 'grupo';
-    pluralName: 'grupos';
-    singularName: 'grupo';
+    displayName: 'character';
+    pluralName: 'characters';
+    singularName: 'character';
   };
   options: {
     draftAndPublish: true;
@@ -444,8 +444,51 @@ export interface ApiGrupoGrupo extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    description: Schema.Attribute.Text;
+    gender: Schema.Attribute.Enumeration<
+      ['Male', 'Female', 'Other', 'Unknown']
+    >;
+    image: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    ki: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<'oneToMany', 'api::grupo.grupo'> &
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::character.character'
+    > &
+      Schema.Attribute.Private;
+    maxki: Schema.Attribute.String;
+    name: Schema.Attribute.String;
+    planet: Schema.Attribute.Relation<'manyToOne', 'api::planet.planet'>;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiPlanetPlanet extends Struct.CollectionTypeSchema {
+  collectionName: 'planets';
+  info: {
+    displayName: 'planet';
+    pluralName: 'planets';
+    singularName: 'planet';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    characters: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::character.character'
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::planet.planet'
+    > &
       Schema.Attribute.Private;
     name: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
@@ -965,7 +1008,8 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
-      'api::grupo.grupo': ApiGrupoGrupo;
+      'api::character.character': ApiCharacterCharacter;
+      'api::planet.planet': ApiPlanetPlanet;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;
