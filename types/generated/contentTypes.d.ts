@@ -433,6 +433,7 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
 export interface ApiCharacterCharacter extends Struct.CollectionTypeSchema {
   collectionName: 'characters';
   info: {
+    displayField: 'name';
     displayName: 'character';
     pluralName: 'characters';
     singularName: 'character';
@@ -441,6 +442,20 @@ export interface ApiCharacterCharacter extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    affiliation: Schema.Attribute.Enumeration<
+      [
+        'Z Fighter',
+        'Red Ribbon Army',
+        'Namekian Warrior',
+        'Freelancer',
+        'Army of Frieza',
+        'Other',
+        'Pride Troopers',
+        'Assistant of Vermoud',
+        'Assistant of Beerus',
+        'Villain',
+      ]
+    >;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -456,10 +471,27 @@ export interface ApiCharacterCharacter extends Struct.CollectionTypeSchema {
       'api::character.character'
     > &
       Schema.Attribute.Private;
-    maxki: Schema.Attribute.String;
+    maxKi: Schema.Attribute.String;
     name: Schema.Attribute.String;
     planet: Schema.Attribute.Relation<'manyToOne', 'api::planet.planet'>;
     publishedAt: Schema.Attribute.DateTime;
+    race: Schema.Attribute.Enumeration<
+      [
+        'Saiyan',
+        'Namekian',
+        'Human',
+        'Majin',
+        'Frieza Race',
+        'Jiren Race',
+        'Android',
+        'God',
+        'Angel',
+        'Evil',
+        'Unknown',
+        'Nucleico benigno',
+        'Nucleico',
+      ]
+    >;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -484,6 +516,8 @@ export interface ApiPlanetPlanet extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    description: Schema.Attribute.Text;
+    isDestroyed: Schema.Attribute.Boolean;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -953,7 +987,6 @@ export interface PluginUsersPermissionsUser
   };
   options: {
     draftAndPublish: false;
-    timestamps: true;
   };
   attributes: {
     blocked: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
@@ -973,6 +1006,7 @@ export interface PluginUsersPermissionsUser
       'plugin::users-permissions.user'
     > &
       Schema.Attribute.Private;
+    name: Schema.Attribute.String;
     password: Schema.Attribute.Password &
       Schema.Attribute.Private &
       Schema.Attribute.SetMinMaxLength<{
@@ -985,6 +1019,7 @@ export interface PluginUsersPermissionsUser
       'manyToOne',
       'plugin::users-permissions.role'
     >;
+    surname: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;

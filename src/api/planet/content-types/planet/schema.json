@@ -19,6 +19,12 @@
       "relation": "oneToMany",
       "target": "api::character.character",
       "mappedBy": "planet"
+    },
+    "isDestroyed": {
+      "type": "boolean"
+    },
+    "description": {
+      "type": "text"
     }
   }
 }
