@@ -11,25 +11,39 @@ export default {
       return ctx.unauthorized('Debes estar autenticado para actualizar tu perfil');
     }
 
-    // Extraer solo los campos permitidos
-    const { name, surname } = ctx.request.body;
+    // Extraer datos del body
+    const { name, surname, id, documentId, ...otherFields } = ctx.request.body;
 
-    // Validar que al menos se envíe un campo
+    // SEGURIDAD: Verificar que no se intenten modificar campos no permitidos
+    if (id || documentId || Object.keys(otherFields).length > 0) {
+      return ctx.forbidden(
+        'Solo puedes actualizar los campos: name y surname. ' +
+        'No puedes modificar el id u otros campos del usuario.'
+      );
+    }
+
+    // Validar que al menos se envíe un campo permitido
     if (!name && !surname) {
       return ctx.badRequest('Debes proporcionar al menos un campo para actualizar (name o surname)');
     }
 
     try {
-      // Preparar los datos a actualizar
+      // Preparar los datos a actualizar (solo campos permitidos)
       const updateData: any = {};
       if (name !== undefined) updateData.name = name;
       if (surname !== undefined) updateData.surname = surname;
 
-      // Actualizar el usuario usando el Document Service API
+      // SEGURIDAD: Actualizar solo el usuario autenticado (del token)
+      // Usamos user.documentId del contexto, nunca del body
       const updatedUser = await strapi.documents('plugin::users-permissions.user').update({
         documentId: user.documentId,
         data: updateData,
       });
+
+      // Verificar que el usuario actualizado es el mismo que el autenticado
+      if (updatedUser.documentId !== user.documentId) {
+        return ctx.forbidden('No tienes permiso para actualizar este usuario');
+      }
 
       // Sanitizar la salida usando la API de sanitización de Strapi
       const contentType = strapi.contentType('plugin::users-permissions.user');
